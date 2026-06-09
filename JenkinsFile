@@ -16,13 +16,13 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                bat 'npm install'
             }
         }
 
         stage('Build') {
             steps {
-                sh 'npm run build'
+                bat 'npm run build'
             }
         }
 
@@ -35,14 +35,14 @@ pipeline {
                     )
                 ]) {
 
-                    sh '''
+                    bat """
                     git config --global user.email "jenkins@example.com"
                     git config --global user.name "Jenkins"
 
-                    git remote set-url origin https://${GITHUB_TOKEN}@github.com/naveenkumarr21/React-CI-jenkins-Demo
+                    git remote set-url origin https://%GITHUB_TOKEN%@github.com/naveenkumarr21/React-CI-jenkins-Demo.git
 
                     npm run deploy
-                    '''
+                    """
                 }
             }
         }
