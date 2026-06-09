@@ -1,0 +1,42 @@
+pipeline {
+    agent any
+
+    tools {
+        nodejs 'NodeJS_20'
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                url: 'https://github.com/naveenkumarr21/React-CI-jenkins-Demo'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                bat 'npm install'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                bat 'npm run build'
+            }
+        }
+
+      stage('Deploy To Github Pages') {
+    steps {
+        withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+
+            bat """
+            git config --global user.email "jenkins@example.com"
+            git config --global user.name "Jenkins"
+
+            npx gh-pages -d dist --repo https://x-access-token:%GITHUB_TOKEN%@github.com/naveenkumarr21/React-CI-jenkins-Demo.git
+            """
+        }
+    }
+}  }
+}
