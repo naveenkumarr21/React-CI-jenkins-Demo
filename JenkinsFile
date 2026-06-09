@@ -22,21 +22,25 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'npm run build'
+                bat '''
+                rmdir /s /q dist
+                npm run build
+                '''
             }
         }
 
-      stage('Deploy To Github Pages') {
+       stage('Deploy To Github Pages') {
     steps {
         withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
 
-            bat """
+            bat '''
             git config --global user.email "jenkins@example.com"
             git config --global user.name "Jenkins"
 
             npx gh-pages -d dist --repo https://x-access-token:%GITHUB_TOKEN%@github.com/naveenkumarr21/React-CI-jenkins-Demo.git
-            """
+            '''
         }
     }
-}  }
+}
+    }
 }
